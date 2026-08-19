@@ -1,6 +1,9 @@
 import xml.etree.ElementTree as ET
 from app.scanner.http import request_url
 
+def _xml_safe_content(content: str) -> str:
+    return "".join(character for character in content if character in "\t\n\r" or ord(character) >= 0x20)
+
 
 def analyze_sitemap(domain: str) -> dict:
     for location in (f"https://{domain}/sitemap.xml", f"http://{domain}/sitemap.xml"):
@@ -8,8 +11,8 @@ def analyze_sitemap(domain: str) -> dict:
         if response.get("status") != "completed": continue
         if response.get("status_code") != 200: continue
         try:
-            root = ET.fromstring(response.get("body", ""))
+            root = ET.fromstring(_xml_safe_content(response.get("body", "")))
             urls = [element.text for element in root.iter() if element.tag.lower().endswith("}loc") and element.text]
-            return {"exists": True, "status": response["status_code"], "urls": urls, "location": location}
+            return {"exists": True, "status": response["status_code"], "urls": urls, "location": location, "source": "SITEMAP_XML"}
         except ET.ParseError as exc: return {"exists": False, "status": response["status_code"], "urls": [], "error": str(exc)}
     return {"exists": False, "status": "not_found", "urls": []}

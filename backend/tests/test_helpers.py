@@ -1,6 +1,7 @@
 from app.scanner.cookies import parse_cookies
 from app.scanner.headers import analyze_headers
 from app.findings.engine import build_findings
+from app.scanner.sitemap import _xml_safe_content
 
 def test_cookie_parser_uses_observed_header():
     cookies = parse_cookies({"set-cookie": "session=abc; Secure; HttpOnly; SameSite=Lax; Path=/"})
@@ -22,3 +23,6 @@ def test_findings_are_deterministic():
     findings = build_findings({"headers": analyze_headers({}, "https://target.invalid"), "tls": {}, "cookies": []})
     assert all(item["severity"] in {"INFO", "LOW", "MEDIUM", "HIGH", "CRITICAL"} for item in findings)
     assert all(item["evidence"] for item in findings)
+
+def test_sitemap_parser_removes_only_invalid_xml_controls():
+    assert _xml_safe_content("<url>\x00https://observed.test/\x08</url>") == "<url>https://observed.test/</url>"
