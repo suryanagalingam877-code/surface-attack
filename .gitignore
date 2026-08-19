@@ -1,0 +1,19 @@
+# Python
+backend/.venv/
+backend/__pycache__/
+backend/**/__pycache__/
+backend/.pytest_cache/
+backend/.env
+backend/recon.db
+backend/reports/*
+!backend/reports/__init__.py
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/.venv/
+frontend/.env
+
+# Generated reports and local tooling
+*.pyc
+.vscode/
