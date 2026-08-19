@@ -33,7 +33,7 @@ def run_scan(domain: str, progress=None) -> tuple[dict, list[dict], list[dict]]:
             if progress: progress(name, "COMPLETED" if value.get("status") != "error" else "FAILED", None)
     http = results.get("http", {})
     results["headers"] = analyze_headers(http.get("headers", {}), http.get("final_url"))
-    results["cookies"] = parse_cookies(http.get("headers", {}))
+    results["cookies"] = parse_cookies(http.get("headers", {}), http.get("set_cookie_headers", []))
     results["technologies"] = detect_technologies(http.get("headers", {}), http.get("body", ""), results["cookies"])
     results["api_endpoints"] = discover_endpoints(domain, http) if http.get("status") == "completed" else {"status": "skipped", "endpoints": []}
     from app.findings.engine import build_findings
@@ -42,6 +42,7 @@ def run_scan(domain: str, progress=None) -> tuple[dict, list[dict], list[dict]]:
         "subdomains_discovered": len(results.get("subdomains", {}).get("subdomains", [])),
         "api_endpoints_discovered": len(results.get("api_endpoints", {}).get("endpoints", [])),
         "dns_records": sum(len(records) for records in results.get("dns", {}).get("records", {}).values()),
+        "cookies_observed": len(results.get("cookies", [])),
         "security_findings": len(findings),
         "tls_status": results.get("tls", {}).get("status"),
     }

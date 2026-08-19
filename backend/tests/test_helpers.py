@@ -7,6 +7,11 @@ def test_cookie_parser_uses_observed_header():
     assert cookies[0]["name"] == "session"
     assert cookies[0]["secure"] is True
 
+def test_cookie_parser_preserves_multiple_set_cookie_headers():
+    cookies = parse_cookies({}, ["one=1; Secure", "two=2; HttpOnly; SameSite=Strict"])
+    assert [cookie["name"] for cookie in cookies] == ["one", "two"]
+    assert cookies[1]["httponly"] is True
+
 def test_header_analysis_has_traceable_evidence():
     result = analyze_headers({"server": "observed"}, "https://target.invalid")
     csp = next(item for item in result if item["header"] == "Content-Security-Policy")
