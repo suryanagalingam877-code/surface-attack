@@ -10,6 +10,9 @@ def _name(entries: tuple) -> str | None:
             if key in {"commonName", "organizationName"}: return value
     return None
 
+def _sans(entries: tuple) -> list[str]:
+    return [value for key, value in (entries or ()) if key == "DNS"]
+
 
 def analyze_tls(domain: str) -> dict:
     try:
@@ -21,6 +24,6 @@ def analyze_tls(domain: str) -> dict:
                 not_after = datetime.strptime(certificate["notAfter"], "%b %d %H:%M:%S %Y %Z").replace(tzinfo=timezone.utc)
                 days_remaining = (not_after - datetime.now(timezone.utc)).days
                 status = "EXPIRED" if days_remaining < 0 else "EXPIRING" if days_remaining <= 30 else "VALID"
-                return {"status": status, "source": "TLS_CERTIFICATE", "subject": _name(certificate.get("subject")), "issuer": _name(certificate.get("issuer")), "serial_number": certificate.get("serialNumber"), "not_before": not_before.isoformat(), "not_after": not_after.isoformat(), "days_remaining": days_remaining, "hostname_match": True, "tls_version": connection.version()}
+                return {"status": status, "source": "TLS_CERTIFICATE", "subject": _name(certificate.get("subject")), "issuer": _name(certificate.get("issuer")), "serial_number": certificate.get("serialNumber"), "not_before": not_before.isoformat(), "not_after": not_after.isoformat(), "days_remaining": days_remaining, "hostname_match": True, "sans": _sans(certificate.get("subjectAltName")), "tls_version": connection.version(), "cipher": connection.cipher()[0] if connection.cipher() else None}
     except ssl.CertificateError as exc: return {"status": "HOSTNAME_MISMATCH", "hostname_match": False, "error": str(exc)}
     except Exception as exc: return {"status": "ERROR", "error": str(exc)}

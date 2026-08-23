@@ -40,6 +40,18 @@ def run_cli(domain: str | None = None) -> int:
 
     results, findings, errors = run_scan(domain, progress=show_module)
     for error in errors: console.print(f"[red][FAILED][/red] {error.get('module')}: {error.get('error')}")
+    https = results.get("http", {})
+    tls = results.get("tls", {})
+    console.print(Panel.fit(
+        f"HTTPS: {https.get('https_available', 'NOT_AVAILABLE')}\n"
+        f"HTTP -> HTTPS: {https.get('http_to_https', {}).get('state', 'UNKNOWN')}\n"
+        f"TLS: {tls.get('tls_version', 'NOT_AVAILABLE')}\n"
+        f"Certificate: {tls.get('status', 'NOT_AVAILABLE')}\n"
+        f"HSTS: {https.get('hsts', {}).get('raw_value', 'NOT_OBSERVED')}\n"
+        f"Mixed content: {len(https.get('mixed_content', []))} observed",
+        title="HTTPS SECURITY",
+        border_style="cyan",
+    ))
     class ScanView:
         pass
     scan = ScanView(); scan.domain = domain; scan.scan_id = scan_id; scan.status = "PARTIAL" if errors else "COMPLETED"; scan.start_time = started.replace(tzinfo=None); scan.end_time = datetime.now(timezone.utc).replace(tzinfo=None)

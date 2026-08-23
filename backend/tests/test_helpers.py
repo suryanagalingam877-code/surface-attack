@@ -2,6 +2,8 @@ from app.scanner.cookies import parse_cookies
 from app.scanner.headers import analyze_headers
 from app.findings.engine import build_findings
 from app.scanner.sitemap import _xml_safe_content
+from app.scanner.engine import _posture_score
+from app.scanner.http import detect_mixed_content, parse_hsts
 
 def test_cookie_parser_uses_observed_header():
     cookies = parse_cookies({"set-cookie": "session=abc; Secure; HttpOnly; SameSite=Lax; Path=/"})
@@ -26,3 +28,14 @@ def test_findings_are_deterministic():
 
 def test_sitemap_parser_removes_only_invalid_xml_controls():
     assert _xml_safe_content("<url>\x00https://observed.test/\x08</url>") == "<url>https://observed.test/</url>"
+
+def test_posture_score_uses_observed_rules_only():
+    score, reasons = _posture_score({"http": {"https_available": True, "http_to_https": {"state": "ENFORCED"}, "hsts": {"present": True}, "mixed_content": []}, "tls": {"status": "VALID"}, "headers": [{"header": "Content-Security-Policy", "present": True}], "cookies": []})
+    assert score == 95
+    assert all(reason["evidence"] for reason in reasons)
+
+def test_hsts_and_mixed_content_use_observed_markup():
+    hsts = parse_hsts("max-age=31536000; includeSubDomains; preload")
+    mixed = detect_mixed_content('<script src="http://observed.test/app.js"></script><img src="https://observed.test/a.png">')
+    assert hsts["max_age"] == "31536000" and hsts["include_subdomains"] is True
+    assert mixed[0]["url"] == "http://observed.test/app.js" and mixed[0]["source"] == "HTML_SOURCE"
