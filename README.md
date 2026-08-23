@@ -20,6 +20,25 @@ No fake scan output. No port scanner. No Nmap.
 
 Every value comes from the target or from a failed check recorded by the scanner. Missing information remains missing.
 
+## Quick Start
+
+After cloning, install the backend dependencies once:
+
+```powershell
+cd D:\pentst
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r backend\requirements.txt
+```
+
+Then run the whole application with one command:
+
+```powershell
+python main.py
+```
+
+On Windows, the browser opens automatically. On Linux, the terminal asks for the target domain. No separate frontend command and no domain command-line argument are required.
+
 ## Platform Modes
 
 ### Windows: browser mode
@@ -82,9 +101,9 @@ python -m pip install -r backend/requirements.txt
 cp backend/.env.example backend/.env
 ```
 
-### 2. Build the frontend once for Windows browser mode
+### 2. Optional frontend development build
 
-The compiled frontend is intentionally ignored by Git. Build it after cloning or after frontend changes:
+The tested production frontend is included, so this step is not required for normal use. Run it only after changing frontend source files:
 
 ```powershell
 cd D:\pentst\frontend
@@ -92,7 +111,7 @@ npm install
 npm run build
 ```
 
-Then start the application from `backend`:
+Then start the application from the repository root:
 
 ```powershell
 cd D:\pentst
