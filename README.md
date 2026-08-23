@@ -27,8 +27,7 @@ Every value comes from the target or from a failed check recorded by the scanner
 Windows opens a local dashboard automatically. The Python process serves both the backend and the built React frontend.
 
 ```powershell
-cd D:\pentst\backend
-.\.venv\Scripts\Activate.ps1
+cd D:\pentst
 python main.py
 ```
 
@@ -39,8 +38,7 @@ The server binds to `127.0.0.1` and selects an available local port. The browser
 Linux asks for the domain in the terminal and keeps the complete workflow in the terminal.
 
 ```bash
-cd /path/to/pentst/backend
-source .venv/bin/activate
+cd /path/to/pentst
 python3 main.py
 ```
 
@@ -67,21 +65,21 @@ The domain is entered interactively. It is not required as a command-line argume
 Windows PowerShell:
 
 ```powershell
-cd D:\pentst\backend
+cd D:\pentst
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-Copy-Item .env.example .env
+python -m pip install -r backend\requirements.txt
+Copy-Item backend\.env.example backend\.env
 ```
 
 Linux:
 
 ```bash
-cd /path/to/pentst/backend
+cd /path/to/pentst
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
-cp .env.example .env
+python -m pip install -r backend/requirements.txt
+cp backend/.env.example backend/.env
 ```
 
 ### 2. Build the frontend once for Windows browser mode
@@ -97,7 +95,7 @@ npm run build
 Then start the application from `backend`:
 
 ```powershell
-cd D:\pentst\backend
+cd D:\pentst
 python main.py
 ```
 
@@ -105,12 +103,12 @@ Node.js is needed for frontend development and builds. It is not needed while th
 
 ## Development Workflow
 
-Run the backend API directly:
+Run the backend API directly when developing:
 
 ```powershell
-cd D:\pentst\backend
+cd D:\pentst
 .\.venv\Scripts\Activate.ps1
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+python -m uvicorn app.main:app --app-dir backend --host 127.0.0.1 --port 8000
 ```
 
 In a second terminal, run Vite with its `/api` proxy:
