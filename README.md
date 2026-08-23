@@ -8,38 +8,61 @@ No fake scan output. No port scanner. No Nmap.
 
 ## What It Does
 
+Real-data reconnaissance across nine operational areas:
+
 | Area | Observations |
 | --- | --- |
-| DNS | A, AAAA, CNAME, MX, NS, and TXT records |
-| Web | HTTP/HTTPS status, redirects, headers, content type, server, response time |
-| TLS | Certificate subject, issuer, validity, hostname match, and TLS version |
-| Discovery | Wordlist-based subdomain resolution and passive API endpoint discovery |
-| Application surface | Cookies, technologies, robots.txt, and sitemap.xml |
-| Findings | Deterministic configuration observations with traceable evidence |
-| Reports | JSON and HTML reports generated from the scan result |
+| DNS | A, AAAA, CNAME, MX, NS, TXT records |
+| HTTP/HTTPS | Status, redirects, headers, content type, server, response time |
+| HTTPS Security | Availability, HTTP-to-HTTPS redirect, HSTS, mixed content, enforcement |
+| TLS | Certificate, issuer, validity, SANs, cipher, hostname match, TLS version |
+| Security Headers | Content-Security-Policy, HSTS, X-Frame-Options, and six more |
+| Cookies | Name, Secure, HttpOnly, SameSite, Domain, Path, Expires, Max-Age |
+| Discovery | Subdomains, API endpoints, JavaScript endpoints |
+| Technologies | Fingerprinted technologies from HTTP headers and HTML |
+| Findings | Deterministic security observations with real evidence |
+| Security Posture | Real-time risk score calculated from actual observations |
+| Reports | JSON and HTML reports from real scan results |
 
-Every value comes from the target or from a failed check recorded by the scanner. Missing information remains missing.
+Every value comes from the target or from a genuine failed check. No dummy data. No fake results.
 
 ## Quick Start
 
-After cloning, install the backend dependencies once:
+**Step 1: Clone the repository**
 
+```bash
+git clone https://github.com/suryanagalingam877-code/surface-attack.git
+cd surface-attack
+```
+
+**Step 2: Create the Python environment and install dependencies**
+
+Windows:
 ```powershell
-cd D:\pentst
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r backend\requirements.txt
+Copy-Item backend\.env.example backend\.env
 ```
 
-If `backend\.venv` already exists, the root launcher automatically uses it when the active environment does not contain the dependencies.
+Linux:
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r backend/requirements.txt
+cp backend/.env.example backend/.env
+```
 
-Then run the whole application with one command:
+**Step 3: Run the application**
 
 ```powershell
 python main.py
 ```
 
-On Windows, the browser opens automatically. On Linux, the terminal asks for the target domain. No separate frontend command and no domain command-line argument are required.
+- On **Windows**, the browser opens automatically to the dashboard.
+- On **Linux**, the terminal asks for the target domain interactively.
+- The root launcher automatically delegates to `backend/.venv` if dependencies are missing.
+- No separate frontend build command is needed; the production bundle is included.
 
 ## Platform Modes
 
@@ -241,20 +264,27 @@ JavaScript resources are downloaded only when referenced by the target page and 
 
 ## Verification
 
-From `backend`:
+Run the test suite:
 
 ```powershell
-.\.venv\Scripts\python.exe -m compileall -q app main.py
-.\.venv\Scripts\python.exe -m pytest -q
+cd D:\pentst
+.\venv\Scripts\python.exe -m pytest -q backend/tests
 ```
 
-From `frontend`:
+Compile check:
 
 ```powershell
+.\venv\Scripts\python.exe -m compileall -q backend/app backend/main.py
+```
+
+Build the frontend (optional, only after source changes):
+
+```powershell
+cd frontend
 npm run build
 ```
 
-The project should report seven passing backend tests and a successful Vite production build.
+All backend tests should pass (`11 passed`).
 
 ## Troubleshooting
 
@@ -284,7 +314,52 @@ Then rerun `python main.py` from `backend`.
 
 **A scan is `PARTIAL`**
 
-Open the Errors section or inspect the report. A partial scan means one or more real modules failed; failed checks are preserved rather than presented as successful results.
+Open the Errors section or inspect the report. A partial scan means one or more real modules failed; failed checks are preserved rather than presented as successful results. Check the timeline and error logs to identify which module failed.
+
+**The root launcher says "Dependencies are missing"**
+
+Run:
+```powershell
+python -m pip install -r backend\requirements.txt
+```
+
+The root launcher will automatically delegate to `backend/.venv` if it is available and correctly installed.
+
+## Features Summary
+
+### Real HTTPS Security Analysis
+- HTTPS availability and reachability
+- HTTP-to-HTTPS redirect enforcement detection
+- HSTS header parsing (max-age, includeSubDomains, preload)
+- Mixed-content detection from actual HTML
+- TLS version, cipher, and certificate details
+- Certificate validity, SAN, and hostname matching
+
+### Security Posture Scoring
+- Real-time risk calculation from actual observations
+- Deterministic scoring rules with documented evidence
+- Rule-based feedback: "Why this score?"
+
+### Attack Surface Inventory
+- Domain, subdomains, API endpoints, JavaScript, external resources
+- Each asset linked to its discovery source
+- Evidence for every observation
+
+### Reconnaissance Graph
+- Visual relationship map of discovered assets
+- Clickable nodes with source and evidence
+- Real data only; no placeholder connections
+
+### Scan Timeline
+- Recorded events for every module
+- Module lifecycle: RUNNING, COMPLETED, FAILED
+- Real timestamps
+
+### Dashboard & CLI
+- Cyber-themed dark UI with cyan/green accents
+- Responsive tables and panels
+- Linux terminal mode with full scan summary
+- Windows browser mode with interactive exploration
 
 ## License
 
