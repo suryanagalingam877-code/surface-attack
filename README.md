@@ -31,6 +31,8 @@ py -3.11 -m venv .venv
 python -m pip install -r backend\requirements.txt
 ```
 
+If `backend\.venv` already exists, the root launcher automatically uses it when the active environment does not contain the dependencies.
+
 Then run the whole application with one command:
 
 ```powershell
