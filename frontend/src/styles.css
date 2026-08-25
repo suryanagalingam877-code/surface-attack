@@ -1,5 +1,5 @@
 /* ==========================================================================
-   RECON CONSOLE — Enterprise Glassmorphism Design System
+   RECON CONSOLE — Liquid Glass & Cyber Reconnaissance Design System
    ========================================================================== */
 
 :root {
@@ -7,47 +7,50 @@
   --font-mono: 'JetBrains Mono', 'DM Mono', monospace;
   --font-display: 'Outfit', 'Plus Jakarta Sans', sans-serif;
 
-  /* Colors */
-  --bg-deep: #05070c;
-  --bg-surface: #090d16;
-  --text-main: #f1f5f9;
-  --text-muted: #8492a6;
-  --text-dim: #505c6e;
+  /* Cyber Void Base Colors */
+  --bg-deep: #03060a;
+  --bg-surface: #070c16;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-dim: #526077;
 
-  /* Glassmorphism Tokens */
-  --glass-bg: rgba(13, 19, 32, 0.72);
-  --glass-bg-subtle: rgba(16, 24, 40, 0.48);
-  --glass-bg-hover: rgba(26, 38, 62, 0.65);
-  --glass-bg-active: rgba(30, 48, 80, 0.8);
-  --glass-border: rgba(255, 255, 255, 0.08);
-  --glass-border-subtle: rgba(255, 255, 255, 0.04);
-  --glass-border-hover: rgba(56, 189, 248, 0.35);
-  --glass-border-active: rgba(56, 189, 248, 0.6);
-  --glass-shadow: 0 12px 36px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  --glass-shadow-sm: 0 4px 16px 0 rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  --glass-blur: blur(20px);
+  /* Liquid Glass Tokens */
+  --glass-bg: rgba(10, 16, 28, 0.62);
+  --glass-bg-subtle: rgba(13, 22, 38, 0.45);
+  --glass-bg-hover: rgba(22, 36, 62, 0.68);
+  --glass-bg-active: rgba(28, 46, 80, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.12);
+  --glass-border-subtle: rgba(255, 255, 255, 0.06);
+  --glass-border-hover: rgba(56, 189, 248, 0.45);
+  --glass-border-active: rgba(56, 189, 248, 0.7);
+  --glass-shadow: 0 16px 44px 0 rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.22), inset 0 0 24px 0 rgba(56, 189, 248, 0.05);
+  --glass-shadow-sm: 0 6px 20px 0 rgba(0, 0, 0, 0.4), inset 0 1px 1px 0 rgba(255, 255, 255, 0.14);
+  --glass-blur: blur(28px) saturate(190%);
 
-  /* Accents & Status Colors */
+  /* Neon Cyber Palette */
   --primary: #38bdf8;
-  --primary-glow: rgba(56, 189, 248, 0.25);
+  --primary-glow: rgba(56, 189, 248, 0.35);
+  --neon-cyan: #00f0ff;
   --indigo: #6366f1;
-  --indigo-glow: rgba(99, 102, 241, 0.2);
+  --indigo-glow: rgba(99, 102, 241, 0.25);
+  --purple: #a855f7;
+  --purple-glow: rgba(168, 85, 247, 0.25);
   --emerald: #10b981;
-  --emerald-glow: rgba(16, 185, 129, 0.2);
-  --emerald-bg: rgba(16, 185, 129, 0.1);
+  --emerald-glow: rgba(16, 185, 129, 0.28);
+  --emerald-bg: rgba(16, 185, 129, 0.12);
   --amber: #f59e0b;
-  --amber-glow: rgba(245, 158, 11, 0.2);
-  --amber-bg: rgba(245, 158, 11, 0.1);
+  --amber-glow: rgba(245, 158, 11, 0.25);
+  --amber-bg: rgba(245, 158, 11, 0.12);
   --rose: #f43f5e;
-  --rose-glow: rgba(244, 63, 94, 0.2);
-  --rose-bg: rgba(244, 63, 94, 0.1);
+  --rose-glow: rgba(244, 63, 94, 0.3);
+  --rose-bg: rgba(244, 63, 94, 0.12);
   --cyan: #06b6d4;
 
-  --radius-sm: 8px;
-  --radius-md: 12px;
-  --radius-lg: 18px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
   --radius-full: 9999px;
-  --transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 *, *::before, *::after {
@@ -63,39 +66,59 @@ html, body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* Background Ambient Lighting */
-body::before {
-  content: '';
+/* ==========================================================================
+   CYBER BACKGROUND (Interactive Grid, Scanlines & Ambient Orbs)
+   ========================================================================== */
+
+.cyber-bg-wrapper {
   position: fixed;
-  top: -10vw;
-  left: 20vw;
-  width: 50vw;
-  height: 50vw;
-  max-width: 700px;
-  max-height: 700px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(99, 102, 241, 0.06) 50%, transparent 70%);
-  filter: blur(80px);
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
   pointer-events: none;
   z-index: 0;
+  overflow: hidden;
 }
 
-body::after {
-  content: '';
-  position: fixed;
-  bottom: -10vw;
-  right: 15vw;
-  width: 45vw;
-  height: 45vw;
-  max-width: 600px;
-  max-height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(56, 189, 248, 0.04) 50%, transparent 70%);
-  filter: blur(80px);
+.cyber-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.cyber-grid-overlay {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 50% 50%, transparent 60%, rgba(3, 6, 10, 0.8) 100%),
+    linear-gradient(rgba(56, 189, 248, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, 0.02) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
+}
+
+.cyber-scanline {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    rgba(0, 0, 0, 0.25) 51%
+  );
+  background-size: 100% 4px;
+  opacity: 0.4;
   pointer-events: none;
-  z-index: 0;
+}
+
+.cyber-vignette {
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 140px rgba(0, 0, 0, 0.85);
+  pointer-events: none;
 }
 
 /* ==========================================================================
@@ -592,6 +615,23 @@ body::after {
   box-shadow: var(--glass-shadow);
   position: relative;
   overflow: hidden;
+  transition: var(--transition);
+}
+
+.panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 30%, var(--primary) 70%, transparent 100%);
+  pointer-events: none;
+}
+
+.panel:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 20px 48px 0 rgba(0, 0, 0, 0.65), inset 0 1px 1px 0 rgba(255, 255, 255, 0.28), inset 0 0 28px 0 rgba(56, 189, 248, 0.08);
 }
 
 .panel-heading {

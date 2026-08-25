@@ -1,10 +1,18 @@
-# Mini Pentest Framework
+# Surface Attack Recon Console
 
-> Real-data-only, non-destructive web reconnaissance for authorized security testing.
+<p align="center">
+  <img src="docs/images/banner.jpg" alt="Surface Attack Recon Console Banner" width="100%" style="border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.6);" />
+</p>
 
-Mini Pentest Framework turns a single domain name into a focused reconnaissance report. It checks the target through actual DNS queries, HTTP/HTTPS requests, TLS connections, passive web-content analysis, and deterministic security rules.
+> **Liquid Glass & Cyber Reconnaissance Platform** — 100% genuine, real-data-only, non-destructive web reconnaissance for authorized security assessments.
 
-No fake scan output. No port scanner. No Nmap.
+<p align="center">
+  <img src="docs/images/dashboard.jpg" alt="Liquid Glass Dashboard Preview" width="100%" style="border-radius: 12px; box-shadow: 0 12px 36px rgba(0,0,0,0.6);" />
+</p>
+
+Mini Pentest Framework / Surface Attack Recon Console turns a single domain name into a focused reconnaissance report. It checks the target through actual DNS queries, HTTP/HTTPS requests, TLS connections, passive web-content analysis, and deterministic security rules.
+
+No fake scan output. No mock dummy data. No port scanner. No Nmap.
 
 ## What It Does
 

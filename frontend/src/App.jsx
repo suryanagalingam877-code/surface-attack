@@ -13,6 +13,7 @@ import {
 import DomainInput from './components/DomainInput'
 import ScanStatus from './components/ScanStatus'
 import Dashboard from './components/Dashboard'
+import CyberBackground from './components/CyberBackground'
 import { useScan } from './hooks/useScan'
 
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
     const domain = scan.domain || scan.target_domain || 'Active Target'
     return (
       <div className="app-shell">
+        <CyberBackground />
         <aside className="sidebar">
           <div className="brand">
             <span className="brand-mark">
@@ -69,6 +71,7 @@ export default function App() {
 
   return (
     <div className="landing">
+      <CyberBackground />
       <header className="landing-top">
         <div className="brand">
           <span className="brand-mark">
