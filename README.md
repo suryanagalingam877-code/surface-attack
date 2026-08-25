@@ -45,12 +45,20 @@ cd surface-attack
 
 **Step 2: Create the Python environment and install dependencies**
 
-Windows:
+Windows (PowerShell):
 ```powershell
 py -3.11 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install -r backend\requirements.txt
 Copy-Item backend\.env.example backend\.env
+```
+
+Windows (Command Prompt / CMD):
+```cmd
+py -3.11 -m venv .venv
+.\.venv\Scripts\activate.bat
+python -m pip install -r backend\requirements.txt
+copy backend\.env.example backend\.env
 ```
 
 Linux:
