@@ -34,6 +34,19 @@ export function getScanResults(scanId) {
   return request(`/scan/${encodeURIComponent(scanId)}/results`)
 }
 
+export function listScans() {
+  return request('/scans')
+}
+
+export function deleteScan(scanId) {
+  return request(`/scan/${encodeURIComponent(scanId)}`, { method: 'DELETE' })
+}
+
+export function clearAllScans() {
+  return request('/scans', { method: 'DELETE' })
+}
+
 export function reportUrl(scanId, format) {
   return `${API_BASE_URL}/scan/${encodeURIComponent(scanId)}/report.${format}`
 }
+

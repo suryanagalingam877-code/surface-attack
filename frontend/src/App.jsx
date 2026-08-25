@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Radar,
   Shield,
@@ -7,17 +8,29 @@ import {
   Globe,
   Lock,
   Layers,
-  Activity,
-  ArrowRight,
+  History,
 } from 'lucide-react'
 import DomainInput from './components/DomainInput'
 import ScanStatus from './components/ScanStatus'
 import Dashboard from './components/Dashboard'
+import ScanHistory from './components/ScanHistory'
 import CyberBackground from './components/CyberBackground'
 import { useScan } from './hooks/useScan'
 
 export default function App() {
-  const { scan, loading, error, run } = useScan()
+  const {
+    scan,
+    loading,
+    error,
+    history,
+    run,
+    loadScan,
+    deleteHistoryScan,
+    clearHistory,
+    resetScan,
+  } = useScan()
+
+  const [historyDrawerOpen, setHistoryDrawerOpen] = useState(false)
 
   if (scan) {
     const domain = scan.domain || scan.target_domain || 'Active Target'
@@ -25,7 +38,7 @@ export default function App() {
       <div className="app-shell">
         <CyberBackground />
         <header className="global-nav">
-          <div className="nav-brand" onClick={() => window.location.reload()} title="Reset to Home">
+          <div className="nav-brand" onClick={resetScan} style={{ cursor: 'pointer' }} title="Reset to Home">
             <span className="brand-mark">
               <Radar size={20} />
             </span>
@@ -41,13 +54,35 @@ export default function App() {
           </div>
 
           <div className="nav-actions">
-            <button className="btn-primary" onClick={() => window.location.reload()}>
+            <button
+              className="btn-secondary"
+              onClick={() => setHistoryDrawerOpen(true)}
+              title="View past assessments"
+            >
+              <History size={14} />
+              <span>History ({history.length})</span>
+            </button>
+
+            <button className="btn-primary" onClick={resetScan}>
               <Zap size={14} /> New Scan
             </button>
           </div>
         </header>
 
-        <Dashboard scan={scan} onReset={() => window.location.reload()} />
+        <Dashboard scan={scan} onReset={resetScan} />
+
+        <ScanHistory
+          isDrawer={true}
+          isOpen={historyDrawerOpen}
+          onClose={() => setHistoryDrawerOpen(false)}
+          history={history}
+          onSelectScan={(id) => {
+            setHistoryDrawerOpen(false)
+            loadScan(id)
+          }}
+          onDeleteScan={deleteHistoryScan}
+          onClearHistory={clearHistory}
+        />
       </div>
     )
   }
@@ -64,9 +99,23 @@ export default function App() {
             RECON<span className="accent">/</span>CONSOLE
           </span>
         </div>
-        <span className="environment">
-          <i /> API READY &bull; REAL-DATA ENGINE
-        </span>
+
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {history.length > 0 && (
+            <button
+              className="btn-secondary"
+              onClick={() => setHistoryDrawerOpen(true)}
+              title="Open Assessment History"
+            >
+              <History size={14} />
+              <span>History ({history.length})</span>
+            </button>
+          )}
+
+          <span className="environment">
+            <i /> API READY &bull; REAL-DATA ENGINE
+          </span>
+        </div>
       </header>
 
       <main className="hero">
@@ -143,11 +192,39 @@ export default function App() {
         </div>
       </main>
 
+      {/* Inline Recent History on Landing Page */}
+      {history.length > 0 && (
+        <section className="landing-history-section">
+          <ScanHistory
+            isDrawer={false}
+            history={history}
+            onSelectScan={loadScan}
+            onDeleteScan={deleteHistoryScan}
+            onClearHistory={clearHistory}
+          />
+        </section>
+      )}
+
       <footer className="landing-footer">
         <span><Globe size={13} /> AUTHENTIC RECONNAISSANCE</span>
         <span><Lock size={13} /> PASSIVE NETWORK OBSERVATION</span>
-        <span><Shield size={13} /> BACKEND SOURCE OF TRUTH</span>
+        <span><Shield size={13} /> PERSISTED SQLITE ENGINE</span>
       </footer>
+
+      {/* Drawer */}
+      <ScanHistory
+        isDrawer={true}
+        isOpen={historyDrawerOpen}
+        onClose={() => setHistoryDrawerOpen(false)}
+        history={history}
+        onSelectScan={(id) => {
+          setHistoryDrawerOpen(false)
+          loadScan(id)
+        }}
+        onDeleteScan={deleteHistoryScan}
+        onClearHistory={clearHistory}
+      />
     </div>
   )
 }
+
