@@ -24,8 +24,8 @@ export default function App() {
     return (
       <div className="app-shell">
         <CyberBackground />
-        <aside className="sidebar">
-          <div className="brand">
+        <header className="global-nav">
+          <div className="nav-brand" onClick={() => window.location.reload()} title="Reset to Home">
             <span className="brand-mark">
               <Radar size={20} />
             </span>
@@ -34,35 +34,18 @@ export default function App() {
             </span>
           </div>
 
-          <div className="side-label">Workspace</div>
-          <nav className="side-nav">
-            <div className="side-item active">
-              <div className="side-item-left">
-                <Shield size={16} />
-                <span>Recon Overview</span>
-              </div>
-              <span className="side-badge">Active</span>
-            </div>
-            <div className="side-item" onClick={() => window.location.reload()}>
-              <div className="side-item-left">
-                <Activity size={16} />
-                <span>New Target</span>
-              </div>
-            </div>
-          </nav>
-
-          <div className="side-footer">
-            <div className="side-target-card">
-              <span>Current Target</span>
-              <strong>{domain}</strong>
-              <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span className="environment" style={{ padding: '2px 8px', fontSize: 10 }}>
-                  <i /> Live Target Data
-                </span>
-              </div>
-            </div>
+          <div className="nav-target-badge">
+            <span className="live-dot" />
+            <span className="target-label">TARGET:</span>
+            <strong>{domain}</strong>
           </div>
-        </aside>
+
+          <div className="nav-actions">
+            <button className="btn-primary" onClick={() => window.location.reload()}>
+              <Zap size={14} /> New Scan
+            </button>
+          </div>
+        </header>
 
         <Dashboard scan={scan} onReset={() => window.location.reload()} />
       </div>
