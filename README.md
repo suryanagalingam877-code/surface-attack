@@ -34,16 +34,28 @@ Real-data reconnaissance across nine operational areas:
 
 Every value comes from the target or from a genuine failed check. No dummy data. No fake results.
 
-## Quick Start
+## Quick Start (Zero-Setup 1-Click Launchers)
 
-**Step 1: Clone the repository**
-
+Clone the repository:
 ```bash
 git clone https://github.com/suryanagalingam877-code/surface-attack.git
 cd surface-attack
 ```
 
-**Step 2: Create the Python environment and install dependencies**
+### ⚡ Option A: 1-Click Automated Run (Recommended for Any User)
+
+| Platform | 1-Click Command | What It Does Automatically |
+| --- | --- | --- |
+| **Windows (CMD)** | `run.bat` | Auto-creates `.venv`, installs requirements, sets up `.env`, and launches Web Console |
+| **Windows (PowerShell)** | `.\run.ps1` | Auto-creates `.venv`, installs requirements, sets up `.env`, and launches Web Console |
+| **Linux / macOS / Kali** | `./run.sh` | Auto-creates `.venv`, installs dependencies, sets up `.env`, and runs interactive scan |
+| **Docker** | `docker compose up` | Runs complete platform in a container at `http://127.0.0.1:8000` |
+
+---
+
+### 🛠️ Option B: Manual Setup
+
+**Step 1: Create the Python environment and install dependencies**
 
 Windows (PowerShell):
 ```powershell
@@ -61,7 +73,7 @@ python -m pip install -r backend\requirements.txt
 copy backend\.env.example backend\.env
 ```
 
-Linux:
+Linux / macOS:
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
@@ -69,16 +81,15 @@ python -m pip install -r backend/requirements.txt
 cp backend/.env.example backend/.env
 ```
 
-**Step 3: Run the application**
+**Step 2: Run the application**
 
-```powershell
+```bash
 python main.py
 ```
 
-- On **Windows**, the browser opens automatically to the dashboard.
+- On **Windows**, the browser opens automatically to the Liquid Glass dashboard.
 - On **Linux**, the terminal asks for the target domain interactively.
-- The root launcher automatically delegates to `backend/.venv` if dependencies are missing.
-- No separate frontend build command is needed; the production bundle is included.
+- The pre-built production UI is bundled; no separate node/npm build is required for end users.
 
 ## Platform Modes
 

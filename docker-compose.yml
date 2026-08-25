@@ -1,0 +1,9 @@
+services:
+  recon-console:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./reports:/app/reports
+    environment:
+      - DATABASE_URL=sqlite:///./recon.db
