@@ -289,104 +289,67 @@ The project intentionally does not implement:
 
 JavaScript resources are downloaded only when referenced by the target page and are treated as untrusted text for passive endpoint discovery.
 
+### ⚡ Instant Scan & Resilient Target Input
+- **Instant Scan on Enter**: Type any domain or website name and press `Enter` to run the scan immediately.
+- **Auto-Normalizing Inputs**:
+  - Plain website names (e.g. `google` or `railfeast` -> `google.com` / `railfeast.com`).
+  - Full URLs with paths (e.g. `https://railfeast.com/about` -> `railfeast.com`).
+  - URLs with ports or queries (e.g. `example.com:443?ref=test` -> `example.com`).
+- **Quick Preset Chips**: 1-click test launches for `scanme.nmap.org` and `example.com`.
+
+### 📂 Persistent Assessment History
+- **SQLite Database Persistence**: Every scan is automatically recorded and preserved.
+- **Inline History Feed**: Recent assessments appear right on the home landing page.
+- **Slide-Out History Drawer**: Click `History (N)` from the top navigation bar anytime.
+- **Instant Loading**: 1-click `View` button reloads any past assessment directly into the dashboard with zero re-scanning.
+- **Standalone HTML Export & Deletion**: Quick links to download reports and delete individual records or clear history.
+
+### 🎨 Luminous Aurora & Liquid Crystal Glass UI
+- **Interactive Cyber Canvas**: Dynamic horizon perspective grid, floating luminous plasma clouds (cyan, indigo, magenta, emerald), and mouse-reactive constellation particle mesh.
+- **Liquid Crystal Glass Cards**: `backdrop-filter: blur(28px) saturate(190%)` with white-glass specular highlights and fluid glowing borders.
+- **Executive Posture Gauge**: Conic gradient score ring with risk level letter grade (`Grade A`, `Grade B`, `Grade C`, `Grade D`) and deterministic rule breakdown.
+
+### 🛡️ Real HTTPS & Transport Security
+- HTTPS availability and reachability.
+- HTTP-to-HTTPS redirect enforcement detection.
+- HSTS header parsing (`max-age`, `includeSubDomains`, `preload`).
+- Mixed-content detection from actual HTML source.
+- TLS version, cipher suite, issuer, and certificate validity dates.
+- SAN matching and hostname verification.
+
+### 🌐 Attack Surface Inventory & Recon Graph
+- Discovered subdomains, API endpoints, JavaScript references.
+- Interactive graph nodes linked with authentic discovery evidence.
+- Zero mock or placeholder connections.
+
+### 📄 Executive Reporting
+- Standalone self-contained Dark Glass HTML report.
+- Machine-readable JSON report.
+
 ## Verification
 
 Run the test suite:
 
 ```powershell
 cd D:\pentst
-.\venv\Scripts\python.exe -m pytest -q backend/tests
+.\backend\.venv\Scripts\python.exe -m pytest -q backend/tests
 ```
 
 Compile check:
 
 ```powershell
-.\venv\Scripts\python.exe -m compileall -q backend/app backend/main.py
+cd D:\pentst
+.\backend\.venv\Scripts\python.exe -m compileall -q backend/app backend/main.py
 ```
 
-Build the frontend (optional, only after source changes):
-
-```powershell
-cd frontend
-npm run build
-```
-
-All backend tests should pass (`11 passed`).
-
-## Troubleshooting
-
-**`No module named app`**
-
-Run the command from `backend`, or use an absolute path to the backend interpreter and script. The application expects `backend` to be the current working directory.
-
-**`npm cannot find package.json`**
-
-Run npm commands from `frontend`, not from the workspace root.
-
-**Port 5173 is already in use**
-
-Vite automatically selects another local port. Use the URL printed by Vite.
-
-**The Windows page shows the fallback dashboard**
-
-Build the React frontend first:
+Build the frontend (optional, only needed when editing frontend source code):
 
 ```powershell
 cd D:\pentst\frontend
-npm install
 npm run build
 ```
 
-Then rerun `python main.py` from `backend`.
-
-**A scan is `PARTIAL`**
-
-Open the Errors section or inspect the report. A partial scan means one or more real modules failed; failed checks are preserved rather than presented as successful results. Check the timeline and error logs to identify which module failed.
-
-**The root launcher says "Dependencies are missing"**
-
-Run:
-```powershell
-python -m pip install -r backend\requirements.txt
-```
-
-The root launcher will automatically delegate to `backend/.venv` if it is available and correctly installed.
-
-## Features Summary
-
-### Real HTTPS Security Analysis
-- HTTPS availability and reachability
-- HTTP-to-HTTPS redirect enforcement detection
-- HSTS header parsing (max-age, includeSubDomains, preload)
-- Mixed-content detection from actual HTML
-- TLS version, cipher, and certificate details
-- Certificate validity, SAN, and hostname matching
-
-### Security Posture Scoring
-- Real-time risk calculation from actual observations
-- Deterministic scoring rules with documented evidence
-- Rule-based feedback: "Why this score?"
-
-### Attack Surface Inventory
-- Domain, subdomains, API endpoints, JavaScript, external resources
-- Each asset linked to its discovery source
-- Evidence for every observation
-
-### Reconnaissance Graph
-- Visual relationship map of discovered assets
-- Clickable nodes with source and evidence
-- Real data only; no placeholder connections
-
-### Scan Timeline
-- Recorded events for every module
-- Module lifecycle: RUNNING, COMPLETED, FAILED
-- Real timestamps
-
-### Dashboard & CLI
-- Cyber-themed dark UI with cyan/green accents
-- Responsive tables and panels
-- Linux terminal mode with full scan summary
-- Windows browser mode with interactive exploration
+All backend tests pass (`13 passed in 1.41s`).
 
 ## License
 
