@@ -7,15 +7,29 @@ export default function DomainInput({ onSubmit, disabled }) {
   const [validation, setValidation] = useState('')
 
   function submit(event) {
-    event?.preventDefault?.()
-    const domain = normalizeDomain(input)
+    if (event) {
+      event.preventDefault()
+      event.stopPropagation()
+    }
+    const raw = input.trim()
+    if (!raw) {
+      setValidation('Please enter a domain or website name (e.g. google.com or railfeast).')
+      return
+    }
+    const domain = normalizeDomain(raw)
     if (!domain) {
-      setValidation('Enter a valid domain name (e.g., scanme.nmap.org or example.com).')
+      setValidation('Enter a valid domain or website name (e.g., scanme.nmap.org, example.com, or https://target.com).')
       return
     }
     setValidation('')
     setInput(domain)
     onSubmit(domain)
+  }
+
+  function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      submit(event)
+    }
   }
 
   function handlePreset(domain) {
@@ -25,8 +39,8 @@ export default function DomainInput({ onSubmit, disabled }) {
   }
 
   return (
-    <form className="target-form" onSubmit={submit}>
-      <label htmlFor="domain">Target Domain</label>
+    <form className="target-form" onSubmit={submit} noValidate>
+      <label htmlFor="domain">Target Domain / Website Name</label>
       <div className="input-wrap">
         <Globe size={18} aria-hidden="true" style={{ color: 'var(--primary)' }} />
         <input
@@ -36,8 +50,11 @@ export default function DomainInput({ onSubmit, disabled }) {
             setInput(event.target.value)
             if (validation) setValidation('')
           }}
-          placeholder="e.g. example.com or scanme.nmap.org"
-          autoComplete="url"
+          onKeyDown={handleKeyDown}
+          placeholder="e.g. example.com, railfeast.com, or https://scanme.nmap.org"
+          autoComplete="off"
+          autoCorrect="off"
+          spellCheck="false"
           autoFocus
           disabled={disabled}
         />

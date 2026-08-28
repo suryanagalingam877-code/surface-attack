@@ -17,13 +17,29 @@ export function arrayOrEmpty(value) {
 }
 
 export function normalizeDomain(input) {
-  if (!input) return null
-  const candidate = input.trim().replace(/^https?:\/\//i, '').split('/')[0].split('?')[0].split('#')[0].toLowerCase().replace(/\.$/, '')
+  if (!input || typeof input !== 'string') return null
+  let candidate = input.trim()
+    .replace(/^https?:\/\//i, '')
+    .replace(/^\/\//, '')
+    .split('/')[0]
+    .split('?')[0]
+    .split('#')[0]
+    .split(':')[0]
+    .toLowerCase()
+    .replace(/\.$/, '')
+
   if (!candidate || candidate.length > 253 || candidate.includes('..')) return null
+
+  // If user typed a single name without TLD (e.g., "google", "railfeast"), auto-complete with .com
+  if (!candidate.includes('.') && /^[a-z0-9-]+$/.test(candidate)) {
+    candidate = `${candidate}.com`
+  }
+
   const labels = candidate.split('.')
   if (labels.length < 2 || labels.some((label) => !/^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$/.test(label))) return null
   return candidate
 }
+
 
 export function formatDate(value) {
   if (!value) return NOT_AVAILABLE

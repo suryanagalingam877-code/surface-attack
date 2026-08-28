@@ -5,21 +5,35 @@ DOMAIN_RE = re.compile(r"^(?=.{1,253}$)(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.
 
 
 def normalize_domain(value: str) -> tuple[str | None, bool, str]:
+    if not value or not isinstance(value, str):
+        return None, False, "Please enter a domain or website name."
     raw = value.strip()
     if not raw or any(char in raw for char in ("\r", "\n", ";", "|", "&", "`", "$", "\\")):
-        return None, False, "Only a domain name is accepted."
+        return None, False, "Only a valid domain name or website URL is accepted."
+
     candidate = raw
-    if "://" in candidate:
+    # If scheme not present but has slashes or path, normalize with dummy scheme for urlsplit
+    if "://" not in candidate:
+        candidate = f"https://{candidate}"
+
+    try:
         parsed = urlsplit(candidate)
-        if parsed.scheme.lower() not in {"http", "https"} or parsed.username or parsed.password or parsed.query or parsed.fragment:
-            return None, False, "Only an HTTP or HTTPS domain URL may be normalized."
-        candidate = parsed.hostname or ""
-        if parsed.path not in {"", "/"}:
-            return None, False, "A target path is not accepted; provide a domain only."
-    else:
-        if "/" in candidate or "?" in candidate or "#" in candidate:
-            return None, False, "A target path is not accepted; provide a domain only."
-    candidate = candidate.rstrip(".").lower()
-    if not DOMAIN_RE.fullmatch(candidate):
-        return None, False, "Malformed domain name."
-    return candidate, True, "Domain accepted."
+        hostname = parsed.hostname or parsed.path.split("/")[0]
+    except Exception:
+        hostname = raw.split("/")[0].split("?")[0].split("#")[0]
+
+    # Strip port if present
+    if hostname and ":" in hostname:
+        hostname = hostname.split(":")[0]
+
+    hostname = (hostname or "").strip().rstrip(".").lower()
+
+    # If user entered just a website brand/name without a dot (e.g. "railfeast" or "google"), auto-append .com
+    if hostname and "." not in hostname and re.match(r"^[a-z0-9-]+$", hostname):
+        hostname = f"{hostname}.com"
+
+    if not hostname or not DOMAIN_RE.fullmatch(hostname):
+        return None, False, "Enter a valid domain name (e.g., example.com or https://example.com)."
+
+    return hostname, True, "Domain accepted."
+

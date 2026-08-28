@@ -3,11 +3,17 @@ from app.scanner.scope import normalize_domain
 def test_normalizes_http_url():
     assert normalize_domain("https://Example.com/") == ("example.com", True, "Domain accepted.")
 
+def test_normalizes_url_with_path():
+    assert normalize_domain("example.com/admin") == ("example.com", True, "Domain accepted.")
+
+def test_normalizes_website_name_without_tld():
+    assert normalize_domain("railfeast") == ("railfeast.com", True, "Domain accepted.")
+
 def test_rejects_command_like_input():
     assert normalize_domain("example.com; whoami")[1] is False
+    assert normalize_domain("example.com | ls")[1] is False
+    assert normalize_domain("example.com`id`")[1] is False
 
-def test_rejects_path():
-    assert normalize_domain("example.com/admin")[1] is False
 
 def test_list_scans_and_delete_api():
     from fastapi.testclient import TestClient
