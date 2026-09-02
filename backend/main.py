@@ -100,13 +100,19 @@ def run_web() -> int:
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="Mini Pentest Framework: authorized, non-destructive domain reconnaissance.")
-    parser.add_argument("domain", nargs="?", help=argparse.SUPPRESS)
-    modes = parser.add_mutually_exclusive_group(); modes.add_argument("--cli", action="store_true", help="Force terminal mode"); modes.add_argument("--web", action="store_true", help="Force local web mode")
+    parser = argparse.ArgumentParser(
+        description="Recon Console: authorized, non-destructive domain reconnaissance (Web & Terminal only)."
+    )
+    parser.add_argument("domain", nargs="?", default=None, help="Target domain to scan in CLI mode (e.g. example.com)")
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument("--cli", action="store_true", help="Run in Terminal / CLI mode")
+    modes.add_argument("--web", action="store_true", help="Run in Web UI mode (FastAPI local server)")
     args = parser.parse_args()
+
     print("Only scan domains you own or have explicit authorization to test.")
     try:
-        init_db(); use_web = args.web or (not args.cli and platform.system() == "Windows")
+        init_db()
+        use_web = args.web or (not args.cli and args.domain is None)
         return run_web() if use_web else run_cli(args.domain)
     except KeyboardInterrupt:
         print("\n[INTERRUPTED] Application stopped by user.")
@@ -115,4 +121,7 @@ def main() -> int:
         print(f"[ERROR] {exc}")
         return 1
 
-if __name__ == "__main__": raise SystemExit(main())
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+

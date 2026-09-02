@@ -12,6 +12,8 @@
 
 Mini Pentest Framework / Surface Attack Recon Console turns a single domain name into a focused reconnaissance report. It checks the target through actual DNS queries, HTTP/HTTPS requests, TLS connections, passive web-content analysis, and deterministic security rules.
 
+**Architecture:** Strictly **Web-Based** (FastAPI backend + Browser UI) and **Terminal-Based** (Python CLI) only. Pure lightweight Python — no native app wrappers, no electron, and no complex containers required.
+
 No fake scan output. No mock dummy data. No port scanner. No Nmap.
 
 ## What It Does
@@ -26,149 +28,98 @@ Real-data reconnaissance across nine operational areas:
 | TLS | Certificate, issuer, validity, SANs, cipher, hostname match, TLS version |
 | Security Headers | Content-Security-Policy, HSTS, X-Frame-Options, and six more |
 | Cookies | Name, Secure, HttpOnly, SameSite, Domain, Path, Expires, Max-Age |
-| Discovery | Subdomains, API endpoints, JavaScript endpoints |
+| Discovery | Subdomains (300+ wordlist), API endpoints, JavaScript endpoints |
 | Technologies | Fingerprinted technologies from HTTP headers and HTML |
 | Findings | Deterministic security observations with real evidence |
 | Security Posture | Real-time risk score calculated from actual observations |
-| Reports | JSON and HTML reports from real scan results |
+| Reports | JSON and standalone HTML reports from real scan results |
 
 Every value comes from the target or from a genuine failed check. No dummy data. No fake results.
 
-## Quick Start (Zero-Setup 1-Click Launchers)
+## Quick Start
 
-Clone the repository:
+### 1. Clone & Setup
+
 ```bash
 git clone https://github.com/suryanagalingam877-code/surface-attack.git
 cd surface-attack
 ```
 
-### ⚡ Option A: 1-Click Automated Run (Recommended for Any User)
+**Linux / Kali / Ubuntu:**
+```bash
+# Install Python venv if not present: sudo apt install python3-venv python3-pip -y
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r backend/requirements.txt
+```
 
-| Platform | 1-Click Command | What It Does Automatically |
-| --- | --- | --- |
-| **Windows (CMD)** | `run.bat` | Auto-creates `.venv`, installs requirements, sets up `.env`, and launches Web Console |
-| **Windows (PowerShell)** | `.\run.ps1` | Auto-creates `.venv`, installs requirements, sets up `.env`, and launches Web Console |
-| **Linux / macOS / Kali** | `./run.sh` | Auto-creates `.venv`, installs dependencies, sets up `.env`, and runs interactive scan |
-| **Docker** | `docker compose up` | Runs complete platform in a container at `http://127.0.0.1:8000` |
+**Windows (PowerShell):**
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+pip install -r backend\requirements.txt
+```
 
 ---
 
-### 🛠️ Option B: Manual Setup
+### 2. How to Run (Linux, macOS & Windows)
 
-**Step 1: Create the Python environment and install dependencies**
+The application supports two pure Python operating modes:
 
-Windows (PowerShell):
-```powershell
-py -3.11 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r backend\requirements.txt
-Copy-Item backend\.env.example backend\.env
-```
+#### 🌐 Web Mode (Local Browser UI)
 
-Windows (Command Prompt / CMD):
-```cmd
-py -3.11 -m venv .venv
-.\.venv\Scripts\activate.bat
-python -m pip install -r backend\requirements.txt
-copy backend\.env.example backend\.env
-```
-
-Linux / macOS:
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r backend/requirements.txt
-cp backend/.env.example backend/.env
-```
-
-**Step 2: Run the application**
+Starts the local FastAPI server and loads the sleek Cyber Reconnaissance dashboard:
 
 ```bash
-python main.py
-```
-
-- On **Windows**, the browser opens automatically to the Liquid Glass dashboard.
-- On **Linux**, the terminal asks for the target domain interactively.
-- The pre-built production UI is bundled; no separate node/npm build is required for end users.
-
-## Platform Modes
-
-### Windows: browser mode
-
-Windows opens a local dashboard automatically. The Python process serves both the backend and the built React frontend.
-
-```powershell
-cd D:\pentst
-python main.py
-```
-
-The server binds to `127.0.0.1` and selects an available local port. The browser opens automatically.
-
-### Linux, Kali, Ubuntu: terminal mode
-
-Linux asks for the domain in the terminal and keeps the complete workflow in the terminal.
-
-```bash
-cd /path/to/pentst
-python3 main.py
-```
-
-The terminal displays real module states, findings, errors, and report paths. It does not open a browser by default.
-
-### Force a mode
-
-```powershell
-python main.py --cli
-python main.py --web
-```
-
-```bash
-python3 main.py --cli
+# Linux / macOS:
 python3 main.py --web
+
+# Windows:
+python main.py --web
+# (or just: python main.py)
 ```
+*Access in any browser at:* **`http://127.0.0.1:8000/`**
 
-The domain is entered interactively. It is not required as a command-line argument.
+---
 
-## First-Time Setup
+#### 💻 Terminal / CLI Mode (Command Line Only)
 
-### 1. Create the Python environment
-
-Windows PowerShell:
-
-```powershell
-cd D:\pentst
-py -3.11 -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r backend\requirements.txt
-Copy-Item backend\.env.example backend\.env
-```
-
-Linux:
+Executes passive reconnaissance directly in your terminal and prints formatted reports:
 
 ```bash
-cd /path/to/pentst
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install -r backend/requirements.txt
-cp backend/.env.example backend/.env
+# Linux / Kali / macOS:
+python3 main.py example.com
+
+# Windows:
+python main.py example.com
 ```
 
-### 2. Optional frontend development build
+*To force explicit CLI mode:*
+```bash
+python main.py example.com --cli
+```
 
-The tested production frontend is included, so this step is not required for normal use. Run it only after changing frontend source files:
+---
+
+### ⚡ 1-Click Automated Scripts (Optional)
+
+If you prefer an automated 1-click launcher that activates the virtual environment and checks dependencies for you:
+
+| Platform | Command | Mode Launched |
+| :--- | :--- | :--- |
+| **Linux / Kali / macOS** | `./run.sh` | Web & interactive CLI |
+| **Windows (PowerShell)** | `.\run.ps1` | Web Console |
+| **Windows (CMD / Double-click)** | `run.bat` | Web Console |
+
+### Optional Frontend Development Build
+
+The tested production frontend bundle is already compiled and included in `frontend/dist/`. Building with Node is only needed when editing frontend source code:
 
 ```powershell
-cd D:\pentst\frontend
-npm install
+cd frontend
 npm run build
 ```
 
-Then start the application from the repository root:
-
-```powershell
-cd D:\pentst
-python main.py
-```
 
 Node.js is needed for frontend development and builds. It is not needed while the already-built dashboard is being served by Python.
 
