@@ -17,6 +17,15 @@ def discover_subdomains(domain: str) -> dict:
 
     path = Path(settings.subdomain_wordlist)
     if not path.is_file():
+        fallbacks = (
+            Path(__file__).resolve().parents[2] / "wordlists" / "subdomains.txt",
+            Path(__file__).resolve().parents[3] / "wordlists" / "subdomains.txt",
+            Path("wordlists/subdomains.txt"),
+            Path("backend/wordlists/subdomains.txt"),
+        )
+        path = next((p for p in fallbacks if p.is_file()), path)
+
+    if not path.is_file():
         return {"status": "error", "subdomains": [], "error": f"Wordlist not found: {path}", "checked_candidates": 0}
 
     raw_candidates = []

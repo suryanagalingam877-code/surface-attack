@@ -1,0 +1,8 @@
+{
+  "version": 1,
+  "setup": "template",
+  "templateId": "python",
+  "language": "Python",
+  "createdAt": "2026-08-31T13:59:53.451Z",
+  "tool": "xgrok"
+}

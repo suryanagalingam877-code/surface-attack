@@ -1,0 +1,1 @@
+# Prefer pyproject.toml; pin runtime deps here if needed

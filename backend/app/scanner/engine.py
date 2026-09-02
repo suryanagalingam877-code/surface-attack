@@ -1,5 +1,6 @@
 import concurrent.futures
 from datetime import datetime, timezone
+from app.findings.engine import build_findings
 from app.scanner.api_discovery import discover_endpoints
 from app.scanner.cookies import parse_cookies
 from app.scanner.dns import query_dns
@@ -10,6 +11,7 @@ from app.scanner.sitemap import analyze_sitemap
 from app.scanner.subdomains import discover_subdomains
 from app.scanner.technology import detect_technologies
 from app.scanner.tls import analyze_tls
+
 
 
 def run_scan(domain: str, progress=None) -> tuple[dict, list[dict], list[dict]]:
@@ -40,8 +42,13 @@ def run_scan(domain: str, progress=None) -> tuple[dict, list[dict], list[dict]]:
     results["headers"] = analyze_headers(http.get("headers", {}), http.get("final_url"))
     results["cookies"] = parse_cookies(http.get("headers", {}), http.get("set_cookie_headers", []))
     results["technologies"] = detect_technologies(http.get("headers", {}), http.get("body", ""), results["cookies"])
-    results["api_endpoints"] = discover_endpoints(domain, http) if http.get("status") == "completed" else {"status": "skipped", "endpoints": []}
-    from app.findings.engine import build_findings
+    results["api_endpoints"] = (
+        discover_endpoints(domain, http, robots=results.get("robots"), sitemap=results.get("sitemap"))
+        if http.get("status") == "completed"
+        else {"status": "skipped", "endpoints": []}
+    )
+
+
     findings = build_findings(results)
     score, score_reasons = _posture_score(results)
     results["https_security"] = {"https_available": http.get("https_available"), "http_to_https": http.get("http_to_https"), "https_enforcement": http.get("http_to_https", {}).get("state", "UNKNOWN"), "tls_version": results.get("tls", {}).get("tls_version"), "certificate_status": results.get("tls", {}).get("status"), "hostname_match": results.get("tls", {}).get("hostname_match"), "certificate_expiry": results.get("tls", {}).get("not_after"), "hsts": http.get("hsts", {"present": False, "raw_value": None}), "mixed_content": http.get("mixed_content", []), "secure_cookies": sum(1 for cookie in results.get("cookies", []) if cookie.get("secure")), "source": "HTTP_RESPONSE_AND_TLS_CERTIFICATE"}

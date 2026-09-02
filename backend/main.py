@@ -64,6 +64,8 @@ def run_cli(domain: str | None = None) -> int:
 
 
 def run_web() -> int:
+    import asyncio
+    import signal
     import uvicorn
     from fastapi.staticfiles import StaticFiles
     from app.main import app
@@ -75,9 +77,26 @@ def run_web() -> int:
         app.include_router(dashboard_router)
     port = available_port(); url = f"http://127.0.0.1:{port}/"
     print(f"Local server: {url}")
+    print("Press Ctrl+C to stop.")
     threading.Timer(0.8, lambda: webbrowser.open(url)).start()
-    uvicorn.run(app, host="127.0.0.1", port=port, log_level="info")
+    config = uvicorn.Config(app, host="127.0.0.1", port=port, log_level="info")
+    server = uvicorn.Server(config)
+    def signal_handler(signum, frame):
+        print("\n[!] Shutting down local server...")
+        server.should_exit = True
+        server.force_exit = True
+
+    try:
+        signal.signal(signal.SIGINT, signal_handler)
+    except Exception:
+        pass
+
+    try:
+        asyncio.run(server.serve())
+    except (KeyboardInterrupt, SystemExit):
+        return 0
     return 0
+
 
 
 def main() -> int:
@@ -86,7 +105,14 @@ def main() -> int:
     modes = parser.add_mutually_exclusive_group(); modes.add_argument("--cli", action="store_true", help="Force terminal mode"); modes.add_argument("--web", action="store_true", help="Force local web mode")
     args = parser.parse_args()
     print("Only scan domains you own or have explicit authorization to test.")
-    init_db(); use_web = args.web or (not args.cli and platform.system() == "Windows")
-    return run_web() if use_web else run_cli(args.domain)
+    try:
+        init_db(); use_web = args.web or (not args.cli and platform.system() == "Windows")
+        return run_web() if use_web else run_cli(args.domain)
+    except KeyboardInterrupt:
+        print("\n[INTERRUPTED] Application stopped by user.")
+        return 0
+    except Exception as exc:
+        print(f"[ERROR] {exc}")
+        return 1
 
 if __name__ == "__main__": raise SystemExit(main())

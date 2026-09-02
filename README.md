@@ -331,15 +331,15 @@ JavaScript resources are downloaded only when referenced by the target page and 
 Run the test suite:
 
 ```powershell
-cd D:\pentst
-.\backend\.venv\Scripts\python.exe -m pytest -q backend/tests
+cd D:\pentst\backend
+.\.venv\Scripts\python.exe -m pytest -q tests
 ```
 
 Compile check:
 
 ```powershell
-cd D:\pentst
-.\backend\.venv\Scripts\python.exe -m compileall -q backend/app backend/main.py
+cd D:\pentst\backend
+.\.venv\Scripts\python.exe -m compileall -q app main.py
 ```
 
 Build the frontend (optional, only needed when editing frontend source code):
@@ -351,6 +351,29 @@ npm run build
 
 All backend tests pass (`13 passed in 1.41s`).
 
+## Troubleshooting
+
+**`No module named app`**
+
+Run the command from `backend`, or use the root launchers (`run.bat`, `.\run.ps1`, `./run.sh`, `python main.py`). The application automatically configures Python import paths.
+
+**`Dependencies are missing`**
+
+Run:
+```powershell
+python -m pip install -r backend\requirements.txt
+```
+Or run `run.bat` / `.\run.ps1` / `./run.sh` to automatically set up the virtual environment and install dependencies.
+
+**Port 5173 is already in use**
+
+Vite automatically selects another local port. Use the URL printed by Vite.
+
+**A scan is `PARTIAL`**
+
+Open the Errors section or inspect the report. A partial scan means one or more real modules failed; failed checks are preserved rather than presented as successful results. Check the timeline and error logs to identify which module failed.
+
 ## License
 
 See [LICENSE](LICENSE).
+

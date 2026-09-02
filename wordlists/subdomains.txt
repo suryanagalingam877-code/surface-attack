@@ -100,10 +100,12 @@ redis
 elasticsearch
 rabbitmq
 kafka
+cache
 memcached
 
 # Monitoring & Operations
 mon
+monitoring
 observability
 prometheus
 grafana
@@ -145,10 +147,6 @@ openid
 saml
 adfs
 ldap
-authn
-identity
-login
-sso
 
 # APIs & Web Services
 graphql
@@ -161,8 +159,6 @@ soap
 rest
 openapi
 swagger
-api2
-services
 
 # Mobile & Web
 ios
@@ -172,7 +168,6 @@ apps
 mobile
 native
 web
-webmail
 
 # Payment & Commerce
 stripe
@@ -183,8 +178,6 @@ payment
 billing
 invoice
 receipt
-ecommerce
-orders
 
 # CDN & Caching
 cloudflare
@@ -193,7 +186,6 @@ cloudfront
 fastly
 max
 cdn-edge
-cdn2
 
 # Maps & Location
 maps
@@ -212,13 +204,12 @@ matomo
 # Marketing
 marketing
 campaign
+email
 crm
 salesforce
 hubspot
 mailchimp
 sendgrid
-news
-events
 
 # Social Media
 facebook
@@ -231,10 +222,10 @@ youtube
 twitch
 
 # Search
+elasticsearch
 solr
 sphinx
 meilisearch
-search
 
 # Messaging
 slack
@@ -242,7 +233,6 @@ teams
 discord
 telegram
 whatsapp
-queue
 
 # Video & Streaming
 video
@@ -264,13 +254,16 @@ box
 cockroachdb
 dynamodb
 cassandra
+elasticsearch
 mongodb
 postgresql
+mysql
 mariadb
 oracle
 mssql
 
 # Real-time
+websocket
 socket-io
 signalr
 firebase
@@ -297,31 +290,14 @@ manager
 controlpanel
 cpanel
 awstats
-manage
-internal
-intranet
-jira
-wiki
 
 # Subversion
 trunk
 branches
 tags
 
-# Well-known & next
+# Well-known services
 well-known
 acme-challenge
 robots
 sitemap
-next
-stage
-www2
-www3
-redirect
-release
-upload
-office
-ops
-account
-accounts
-
