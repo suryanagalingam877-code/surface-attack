@@ -66,8 +66,37 @@ html, body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(3, 6, 12, 0.7);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: var(--radius-full);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: var(--transition);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(56, 189, 248, 0.5);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.4);
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.28);
+  color: #ffffff;
+}
+
 
 /* ==========================================================================
    CYBER BACKGROUND (Interactive Grid, Scanlines & Ambient Orbs)
@@ -815,6 +844,7 @@ html, body {
 .metric-card {
   background: var(--glass-bg);
   backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   border-radius: var(--radius-md);
   padding: 18px 20px;
@@ -823,12 +853,26 @@ html, body {
   gap: 16px;
   box-shadow: var(--glass-shadow-sm);
   transition: var(--transition);
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.25) 50%, transparent 100%);
+  opacity: 0.6;
 }
 
 .metric-card:hover {
   background: var(--glass-bg-hover);
-  border-color: var(--glass-border-hover);
+  border-color: rgba(56, 189, 248, 0.4);
   transform: translateY(-2px);
+  box-shadow: 0 12px 28px -4px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 0 24px rgba(56, 189, 248, 0.12);
 }
 
 .metric-icon {
@@ -841,6 +885,14 @@ html, body {
   border: 1px solid var(--glass-border);
   color: var(--primary);
   flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.metric-card:hover .metric-icon {
+  transform: scale(1.05);
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.35);
+  box-shadow: 0 0 14px var(--primary-glow);
 }
 
 .metric-card.has-findings .metric-icon {
@@ -882,11 +934,13 @@ html, body {
   gap: 6px;
   padding: 6px;
   border-radius: var(--radius-md);
-  background: rgba(9, 13, 22, 0.65);
+  background: rgba(8, 14, 26, 0.72);
   backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border: 1px solid var(--glass-border);
   margin-bottom: 24px;
   overflow-x: auto;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
 }
 
 .tab-btn {
@@ -909,29 +963,33 @@ html, body {
 .tab-btn:hover {
   color: var(--text-main);
   background: var(--glass-bg-subtle);
+  border-color: rgba(255, 255, 255, 0.06);
 }
 
 .tab-btn.active {
   color: #ffffff;
-  background: rgba(56, 189, 248, 0.16);
-  border-color: rgba(56, 189, 248, 0.35);
-  box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.2) 0%, rgba(99, 102, 241, 0.15) 100%);
+  border-color: rgba(56, 189, 248, 0.4);
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.18);
 }
 
 .tab-count {
   font-family: var(--font-mono);
   font-size: 11px;
-  padding: 1px 7px;
+  padding: 2px 7px;
   border-radius: var(--radius-full);
   background: rgba(255, 255, 255, 0.08);
   color: var(--text-muted);
+  transition: var(--transition);
 }
 
 .tab-btn.active .tab-count {
   background: var(--primary);
-  color: #07111a;
+  color: #030814;
   font-weight: 700;
+  box-shadow: 0 0 8px var(--primary-glow);
 }
+
 
 /* ==========================================================================
    GLASS PANELS & SECTIONS
