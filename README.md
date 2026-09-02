@@ -64,39 +64,42 @@ pip install -r backend\requirements.txt
 
 ### 2. How to Run (Linux, macOS & Windows)
 
-The application supports two pure Python operating modes:
+The application automatically adapts to your operating system:
 
-#### 🌐 Web Mode (Local Browser UI)
-
-Starts the local FastAPI server and loads the sleek Cyber Reconnaissance dashboard:
-
-```bash
-# Linux / macOS:
-python3 main.py --web
-
-# Windows:
-python main.py --web
-# (or just: python main.py)
+#### 🪟 Windows (Defaults to Web Browser Mode)
+Running without arguments opens the Cyber Reconnaissance Web Dashboard automatically in your browser:
+```powershell
+python main.py
 ```
-*Access in any browser at:* **`http://127.0.0.1:8000/`**
+*(Or explicitly specify `--web`: `python main.py --web`, or double-click `run.bat` / run `.\run.ps1`)*
+
+To run a terminal CLI scan on Windows:
+```powershell
+python main.py example.com
+# or
+python main.py example.com --cli
+```
 
 ---
 
-#### 💻 Terminal / CLI Mode (Command Line Only)
-
-Executes passive reconnaissance directly in your terminal and prints formatted reports:
-
+#### 🐧 Linux, Kali, Ubuntu & macOS (Defaults to Terminal Mode)
+Running without arguments runs interactive reconnaissance directly in your terminal:
 ```bash
-# Linux / Kali / macOS:
-python3 main.py example.com
-
-# Windows:
-python main.py example.com
+python3 main.py
 ```
+*(Prompts for the target domain interactively and outputs formatted live terminal findings + JSON/HTML reports)*
 
-*To force explicit CLI mode:*
+To start the Web Dashboard on Linux:
 ```bash
-python main.py example.com --cli
+python3 main.py --web
+```
+*Access in any browser at:* **`http://127.0.0.1:8000/`**
+
+To scan a target domain directly via CLI on Linux:
+```bash
+python3 main.py example.com
+# or
+python3 main.py example.com --cli
 ```
 
 ---
@@ -107,9 +110,10 @@ If you prefer an automated 1-click launcher that activates the virtual environme
 
 | Platform | Command | Mode Launched |
 | :--- | :--- | :--- |
-| **Linux / Kali / macOS** | `./run.sh` | Web & interactive CLI |
+| **Linux / Kali / macOS** | `./run.sh` | Terminal mode (or `./run.sh --web` for Web) |
 | **Windows (PowerShell)** | `.\run.ps1` | Web Console |
 | **Windows (CMD / Double-click)** | `run.bat` | Web Console |
+
 
 ### Optional Frontend Development Build
 

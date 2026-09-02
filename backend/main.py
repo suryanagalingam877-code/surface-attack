@@ -112,7 +112,18 @@ def main() -> int:
     print("Only scan domains you own or have explicit authorization to test.")
     try:
         init_db()
-        use_web = args.web or (not args.cli and args.domain is None)
+        is_windows = platform.system() == "Windows"
+        if args.web:
+            use_web = True
+        elif args.cli:
+            use_web = False
+        elif args.domain is not None:
+            use_web = False
+        else:
+            # On Windows: 'python main.py' defaults to Web UI (opens browser)
+            # On Linux: 'python main.py' defaults to interactive Terminal CLI
+            use_web = is_windows
+
         return run_web() if use_web else run_cli(args.domain)
     except KeyboardInterrupt:
         print("\n[INTERRUPTED] Application stopped by user.")
@@ -120,6 +131,7 @@ def main() -> int:
     except Exception as exc:
         print(f"[ERROR] {exc}")
         return 1
+
 
 
 if __name__ == "__main__":
