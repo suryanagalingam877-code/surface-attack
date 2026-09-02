@@ -5,8 +5,11 @@
 ## Project
 - **Name / stack:** Python app · Python 3.11+
 - **Primary language:** Python
-- **Run:** `python -m src.main`
+- **Architecture:** Strictly **Web-based** (FastAPI backend + Browser UI) & **Terminal-based** (Python CLI) only. Never convert to native desktop/mobile apps.
+- **Run Web:** `python main.py` or `./run.sh` / `.\run.ps1`
+- **Run CLI:** `python main.py <domain> --cli`
 - **Test:** `pytest`
+
 
 ## How Grok should work here
 1. Prefer **read_file / write_file** over shell for source changes.
